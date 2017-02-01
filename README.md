@@ -16,6 +16,7 @@ As in the example/basic to use GrillRust:
 
   * Create a new structure
   ```
+  
   let mut structure = Structure::new();
   ```
   * Add the nodes
