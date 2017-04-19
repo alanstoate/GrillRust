@@ -1,6 +1,5 @@
 # GrillRust
 Calculates the load vector and stiffness matrix of a grillage using the matrix method which can then be used to calculate the nodal displacements and internal forces of the structure.
-(I'm currently looking for a rust matrix library that supports Gaussian Elimination before this can be added)
 
 A grillage is a structure with elements that are in the x-y plane and external forces in the z direction.
 
@@ -51,5 +50,5 @@ As in the example/basic to use GrillRust:
 
 ## To-Do
 * Add documentation to the library
-* Use a library with Gaussian eleimnation support to the final step of the method
+* Use a linear algebra library support to the final step of the method
 * Extend library to handle other structure types
