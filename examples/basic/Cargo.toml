@@ -1,7 +1,0 @@
-[package]
-name = "basic"
-version = "0.1.0"
-authors = ["aStoate <alan.stoate@gmail.com>"]
-
-[dependencies]
-GrillRust = { path = "../../" }

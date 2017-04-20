@@ -6,7 +6,7 @@ use node::*;
 use element_properties::*;
 
 pub struct Structure {
-    pub nodes: Vec<Rc<Node>>, 
+    pub nodes: Vec<Rc<Node>>,
     pub elements: Vec<Element>,
     pub global_k_matrix: Matrix<f64>,
     pub global_loads: Matrix<f64>,
@@ -14,23 +14,28 @@ pub struct Structure {
 
 impl Structure {
     // Creates a default Structure
-    pub fn new() -> Structure
-    {Structure{nodes: Vec::new(), 
-                  elements: Vec::new(), 
-                  global_k_matrix: Matrix::zero(10, 10), 
-                  global_loads: Matrix::zero(1,1),}}
+    pub fn new() -> Structure {
+        Structure {
+            nodes: Vec::new(),
+            elements: Vec::new(),
+            global_k_matrix: Matrix::zero(10, 10),
+            global_loads: Matrix::zero(1, 1),
+        }
+    }
 
     pub fn add_node(&mut self, pos: (f64, f64), fixed: bool) {
         let len = self.nodes.len();
         let mut node = Node::new(pos, len);
-        if fixed {node.fixed_xyz();}
+        if fixed {
+            node.fixed_xyz();
+        }
         self.nodes.push(Rc::new(node));
-        self.global_k_matrix = Matrix::zero((len + 1 ) * 3, (len + 1) * 3);
+        self.global_k_matrix = Matrix::zero((len + 1) * 3, (len + 1) * 3);
         self.global_loads = Matrix::zero((len + 1) * 3, 1);
     }
 
     // Adds a load to the specified node
-    pub fn add_node_load(&mut self, node: usize, load: f64){
+    pub fn add_node_load(&mut self, node: usize, load: f64) {
         let node = Rc::get_mut(&mut self.nodes[node]);
         match node {
             Some(n) => n.load = load,
@@ -39,20 +44,17 @@ impl Structure {
     }
 
     // Adds an load to the specified element
-    pub fn add_element_load(&mut self, element: usize, load:f64, distance: f64, ltype: LoadType) {
+    pub fn add_element_load(&mut self, element: usize, load: f64, distance: f64, ltype: LoadType) {
         self.elements[element].load = load;
         self.elements[element].load_pos = distance;
         self.elements[element].load_type = ltype;
         self.elements[element].calculate_fes();
-        
+
     }
 
     // Adds an element to the structure
-    pub fn add_element(&mut self, n1: usize, n2: usize, props: ElementProperties){
-        let mut element = Element::new(
-            (self.nodes[n1].clone(), self.nodes[n2].clone()),
-            props,
-            6);
+    pub fn add_element(&mut self, n1: usize, n2: usize, props: ElementProperties) {
+        let mut element = Element::new((self.nodes[n1].clone(), self.nodes[n2].clone()), props, 6);
 
         element.find_t_matrix();
         element.find_local_k();
@@ -82,10 +84,10 @@ impl Structure {
     // Calculates and prints the global load and stifness matrices of the structure
     pub fn run_calc(&mut self) {
         for node in &self.nodes {
-            if node.fixed == (true, true, true){
-                let d0 = node.g_dof.0 - 1;            
-                let d1 = node.g_dof.1 - 1;            
-                let d2 = node.g_dof.2 - 1;            
+            if node.fixed == (true, true, true) {
+                let d0 = node.g_dof.0 - 1;
+                let d1 = node.g_dof.1 - 1;
+                let d2 = node.g_dof.2 - 1;
 
                 self.global_k_matrix[(d0, d0)] = 999999.0;
                 self.global_k_matrix[(d1, d1)] = 999999.0;
@@ -98,12 +100,5 @@ impl Structure {
         for element in &self.elements {
             element.add_load_to_global(&mut self.global_loads);
         }
-        println!("Global Load Matrix");
-        super::utils::print_matrix(&self.global_loads);
-        println!("\n");
-
-        println!("Global Stifness Matrix");
-        super::utils::print_matrix(&self.global_k_matrix);
-        println!("\n");
-    } 
+    }
 }

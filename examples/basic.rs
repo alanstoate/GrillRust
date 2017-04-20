@@ -3,6 +3,7 @@ extern crate GrillRust;
 use GrillRust::element_properties::*;
 use GrillRust::structure::*;
 use GrillRust::element::*;
+use GrillRust::utils::*;
 
 fn main() {
     let props = ElementProperties::new(200E+6, 2.133E-6, 80E+6, 2.03E-6);
@@ -22,4 +23,6 @@ fn main() {
     structure.add_element_load(2, -40.0, 2.50, LoadType::PointLoad);
 
     structure.run_calc();
+
+    print_matrix(&structure.global_k_matrix);
 }
