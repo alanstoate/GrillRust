@@ -3,7 +3,7 @@ Calculates the load vector and stiffness matrix of a grillage using the matrix m
 
 A grillage is a structure with elements that are in the x-y plane and external forces in the z direction.
 
-![alt text](https://github.com/alanstoate/GrillRust/blob/master/examples/basic/diagram.png "examples/img/basic diagram.png")
+![alt text](https://github.com/alanstoate/GrillRust/blob/master/examples/img/diagram.png "examples/img/diagram.png")
 
 To run the basic example:
   * Install rust (https://www.rust-lang.org/en-US/install.html)
