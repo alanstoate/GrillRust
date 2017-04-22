@@ -1,12 +1,12 @@
 // Utility functions
 
-use generic_matrix::*;
+use rulinalg::matrix::{Matrix, BaseMatrix};
 
 pub fn print_matrix(m: &Matrix<f64>) {
-    for row in 0..m.row() {
+    for row in 0..m.rows() {
         let mut out: String = format!("{}: ", row);
-        for col in 0..m.column() {
-            out += &format!(" {:10.*} ,", 2, m[(row, col)]);
+        for col in 0..m.cols() {
+            out += &format!(" {:10.*} ,", 2, m[[row, col]]);
         }
         println!("{}", out);
     }
@@ -14,12 +14,12 @@ pub fn print_matrix(m: &Matrix<f64>) {
 
 pub fn string_matrix(m: &Matrix<f64>) -> String {
     let mut out = String::new();
-    for row in 0..m.row() {
-        let mut outRow: String = format!("{}: ", row);
-        for col in 0..m.column() {
-            outRow += &format!(" {:10.*} ,", 2, m[(row, col)]);
+    for row in 0..m.rows() {
+        let mut out_row: String = format!("{}: ", row);
+        for col in 0..m.cols() {
+            out_row += &format!(" {:10.*} ,", 2, m[[row, col]]);
         }
-        out.push_str(&outRow);
+        out.push_str(&out_row);
         out.push_str("\n");
     }
     out

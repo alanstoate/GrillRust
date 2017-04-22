@@ -4,4 +4,5 @@ version = "0.1.0"
 authors = ["aStoate <alan.stoate@gmail.com>"]
 
 [dependencies]
-generic-matrix = "0.0.7"
+rulinalg="0.4.2"
+

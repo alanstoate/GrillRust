@@ -1,6 +1,7 @@
 use std::vec::Vec;
 use std::rc::Rc;
-use generic_matrix::*;
+use rulinalg::matrix::{Matrix, BaseMatrix};
+use rulinalg::vector::Vector;
 use element::*;
 use node::*;
 use element_properties::*;
@@ -10,6 +11,7 @@ pub struct Structure {
     pub elements: Vec<Element>,
     pub global_k_matrix: Matrix<f64>,
     pub global_loads: Matrix<f64>,
+    pub displacements: Vector<f64>,
 }
 
 impl Structure {
@@ -18,8 +20,9 @@ impl Structure {
         Structure {
             nodes: Vec::new(),
             elements: Vec::new(),
-            global_k_matrix: Matrix::zero(10, 10),
-            global_loads: Matrix::zero(1, 1),
+            global_k_matrix: Matrix::zeros(10, 10),
+            global_loads: Matrix::zeros(1, 1),
+            displacements: Vector::from_fn(1, |x| 0.0),
         }
     }
 
@@ -30,8 +33,8 @@ impl Structure {
             node.fixed_xyz();
         }
         self.nodes.push(Rc::new(node));
-        self.global_k_matrix = Matrix::zero((len + 1) * 3, (len + 1) * 3);
-        self.global_loads = Matrix::zero((len + 1) * 3, 1);
+        self.global_k_matrix = Matrix::zeros((len + 1) * 3, (len + 1) * 3);
+        self.global_loads = Matrix::zeros((len + 1) * 3, 1);
     }
 
     // Adds a load to the specified node
@@ -76,7 +79,7 @@ impl Structure {
         for i in 0..6 {
             for j in 0..6 {
                 let (i_g, j_g) = (g_dof[i] - 1, g_dof[j] - 1);
-                self.global_k_matrix[(i_g, j_g)] += element.global_k[(i, j)];
+                self.global_k_matrix[[i_g, j_g]] += element.global_k[[i, j]];
             }
         }
     }
@@ -89,9 +92,9 @@ impl Structure {
                 let d1 = node.g_dof.1 - 1;
                 let d2 = node.g_dof.2 - 1;
 
-                self.global_k_matrix[(d0, d0)] = 999999.0;
-                self.global_k_matrix[(d1, d1)] = 999999.0;
-                self.global_k_matrix[(d2, d2)] = 999999.0;
+                self.global_k_matrix[[d0, d0]] = 999999.0;
+                self.global_k_matrix[[d1, d1]] = 999999.0;
+                self.global_k_matrix[[d2, d2]] = 999999.0;
             }
 
             node.add_load_to_global(&mut self.global_loads);
@@ -100,5 +103,15 @@ impl Structure {
         for element in &self.elements {
             element.add_load_to_global(&mut self.global_loads);
         }
+
+        let mut loads: Vector<f64> = Vector::from_fn(self.global_loads.rows(), |x| 0.0);
+        for row in 0..self.global_loads.rows() {
+            loads[row] = self.global_loads[[row, 0]];
+        }
+
+        self.displacements = self.global_k_matrix
+            .clone()
+            .solve(loads)
+            .unwrap();
     }
 }

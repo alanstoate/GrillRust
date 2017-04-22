@@ -1,4 +1,4 @@
-extern crate generic_matrix;
+extern crate rulinalg;
 
 pub mod structure;
 pub mod element;
