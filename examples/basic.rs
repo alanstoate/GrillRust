@@ -36,11 +36,17 @@ fn main() {
 
     structure.run_calc();
 
+    println!("Load vector");
     print_matrix(&structure.global_loads);
+    println!("\n");
 
+    println!("Stiffness matrix");
     print_matrix(&structure.global_k_matrix);
+    println!("\n");
 
+    println!("Displacements");
     for i in structure.displacements.iter() {
         println!("{}", i);
     }
+    println!("\n");
 }

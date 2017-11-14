@@ -8,7 +8,9 @@ A grillage is a structure with elements that are in the x-y plane and external f
 To run the basic example:
   * Install rust (https://www.rust-lang.org/en-US/install.html)
   * Clone this repository
-  * Navigate to examples/basic/ and run with **cargo run**
+  * Run cargo --example basic
+
+This will output the load vector, stiffness matrix and displacement vector of the structure.
   
 
 ### Usage
@@ -19,16 +21,16 @@ As in the example/basic to use GrillRust:
   
   let mut structure = Structure::new();
   ```
-  * Add the nodes
+  * Add the nodes (passing true as the second argument indicates a fixed node)
   ```
-  structure.add_node((0.0, 2.5), false);
+  structure.add_node((0.0, 2.5), true);
   structure.add_node((5.0, 2.5), false);
-  structure.add_node((7.5, 2.5), false);
-  structure.add_node((5.0, 7.5), false);
-  structure.add_node((5.0, 0.0), false);
+  structure.add_node((7.5, 2.5), true);
+  structure.add_node((5.0, 7.5), true);
+  structure.add_node((5.0, 0.0), true);
   ```
   
-  * Add the elements with desired properties
+  * Add the elements by specifying their nodes and desired properties
   ```
   let props = ElementProperties::new(200E+6, 2.133E-6, 80E+6, 2.03E-6);
   structure.add_element(0, 1, props);
@@ -47,8 +49,3 @@ As in the example/basic to use GrillRust:
   ```
   structure.run_calc();
   ```
-
-## To-Do
-* Add documentation to the library
-* Use a linear algebra library support to the final step of the method
-* Extend library to handle other structure types
