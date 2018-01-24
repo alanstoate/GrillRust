@@ -1,5 +1,5 @@
 # GrillRust
-Calculates the load vector and stiffness matrix of a grillage using the matrix method which can then be used to calculate the nodal displacements and internal forces of the structure.
+Calculates the load vector and stiffness matrix of a grillage using the matrix method of structural analysis which can then be used to calculate the nodal displacements and internal forces of the structure.
 
 A grillage is a structure with elements that are in the x-y plane and external forces in the z direction.
 
@@ -7,8 +7,8 @@ A grillage is a structure with elements that are in the x-y plane and external f
 
 To run the basic example:
   * Install rust (https://www.rust-lang.org/en-US/install.html)
-  * Clone this repository
-  * Run cargo --example basic
+  * Clone this repository with ``` git clone https://github.com/alanstoate/GrillRust.git ``` 
+  * Run ```cargo run --example basic```
 
 This will output the load vector, stiffness matrix and displacement vector of the structure.
   
